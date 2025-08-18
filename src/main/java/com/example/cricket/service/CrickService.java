@@ -1,5 +1,6 @@
 package com.example.cricket.service;
 
+import com.example.cricket.dto.CrickDto;
 import com.example.cricket.entity.Player;
 import com.example.cricket.repository.CrickRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,30 @@ public class CrickService {
         return all;
     }
 
-    public Player savePlayer(Player player) {
-        log.info("In saveplayer method ");
-        return crickRepo.save(player);
+
+    public CrickDto savePlayer(CrickDto dto) {
+
+        log.info("In service ");
+        //dto to entity
+        Player p = new Player();
+        p.setId(dto.getId());
+        p.setName(dto.getName());
+        p.setAge(dto.getAge());
+        p.setRole(dto.getRole());
+        p.setTeam(dto.getTeam());
+        p.setTotalRuns(dto.getTotalRuns());
+        p.setWickets(dto.getWickets());
+
+        Player save = crickRepo.save(p);
+
+        dto.setId(save.getId());
+        dto.setName(save.getName());
+        dto.setAge(save.getAge());
+        dto.setRole(save.getRole());
+        dto.setTeam(save.getTeam());
+        dto.setTotalRuns(save.getTotalRuns());
+        dto.setWickets(save.getWickets());
+        return dto;
     }
 
     public String deleteById(int id) {
@@ -39,7 +61,8 @@ public class CrickService {
     public Player updatePlayerData(int id, Player newData) {
         Optional<Player> byId = crickRepo.findById(id);
         if(byId.isPresent()){
-            Player existing = byId.get();
+
+           Player existing = byId.get();
             existing.setName(newData.getName());
             existing.setAge(newData.getAge());
             existing.setRole(newData.getRole());
@@ -51,6 +74,7 @@ public class CrickService {
             throw new RuntimeException("Employee not found");
         }
     }
+
 }
 
 

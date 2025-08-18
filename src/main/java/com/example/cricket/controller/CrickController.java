@@ -1,12 +1,15 @@
 package com.example.cricket.controller;
 
 
+import com.example.cricket.dto.CrickDto;
 import com.example.cricket.entity.Player;
 import com.example.cricket.service.CrickService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,10 +22,10 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CrickController {
 
 @Autowired
-    private CrickService crickService;
+private CrickService crickService;
 
-    public CrickController(CrickService crickServiceervice){
-        this.crickService = crickService;
+    public CrickController(CrickService crickService){
+       this.crickService = crickService;
     }
 
     @GetMapping("/get")
@@ -31,10 +34,10 @@ public class CrickController {
         return new ResponseEntity<>(allPlayersData, HttpStatus.OK);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Player> savePlayerData( @RequestBody Player player) {
+    @PostMapping("/saveValidation")
+    public ResponseEntity<CrickDto> savePlayerData( @Valid @RequestBody CrickDto crickDto) {
         log.info("In postmapping method");
-        Player player1 = crickService.savePlayer(player);
+        CrickDto player1 = crickService.savePlayer(crickDto);
         log.info("return to postmapping");
         return new ResponseEntity<>(player1, HttpStatus.CREATED);
     }
@@ -49,4 +52,5 @@ public class CrickController {
         Player p = crickService.updatePlayerData(id, updatePlayer);
         return new ResponseEntity<>(p,HttpStatus.OK);
     }
+
 }
