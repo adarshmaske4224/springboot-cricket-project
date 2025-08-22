@@ -13,12 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CrickDto {             //plain old java object class (pojo)
 
-
-
     private int id;
 
 
-    @NotBlank(message = "Enter your name")
+    @NotBlank(message = "name cannot be empty ")
     @Size(min = 2, max = 50, message = "name must be between 2 to 50 characters")
     private String name;
 

@@ -7,6 +7,7 @@ import com.example.cricket.service.CrickService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CrickController {
 
 @Autowired
-private CrickService crickService;
+ CrickService crickService;
 
     public CrickController(CrickService crickService){
        this.crickService = crickService;
@@ -33,6 +34,8 @@ private CrickService crickService;
         List<Player> allPlayersData = crickService.getAllPlayersData();
         return new ResponseEntity<>(allPlayersData, HttpStatus.OK);
     }
+
+    // Validations applayed
 
     @PostMapping("/saveValidation")
     public ResponseEntity<CrickDto> savePlayerData( @Valid @RequestBody CrickDto crickDto) {
@@ -51,6 +54,14 @@ private CrickService crickService;
     public ResponseEntity<Player> updatePlayerData(@PathVariable int id, @RequestBody Player updatePlayer){
         Player p = crickService.updatePlayerData(id, updatePlayer);
         return new ResponseEntity<>(p,HttpStatus.OK);
+    }
+    // finding Players by pagination
+    @GetMapping("/getByPagination")
+    public Page<Player> getPlayersByPagination(@RequestParam int page,
+                                               @RequestParam int size,
+                                               @RequestParam String sortBy){
+        log.info("Api calls to fetch Players");
+        return crickService.findPlayerByPagination(page,size,sortBy);
     }
 
 }
